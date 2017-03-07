@@ -1,16 +1,16 @@
-let x, y;
+var x, y;
 
-const smallellipse1 = (50, 50);
-const smallellipse2 = (30, 30);
-const smallellipse3 = (85, 85);
+var smallellipse1 = (50, 50);
+var smallellipse2 = (30, 30);
+var smallellipse3 = (85, 85);
 
-let eyeSize = 300;
-let counter = 0;
-let mouth;
-let mouseClicked = false;
-let mouthOpeningCompleted = false;
-let canvasNode;
-let mouthColor;
+var eyeSize = 300;
+var counter = 0;
+var mouth;
+var mouseClicked = false;
+var mouthOpeningCompleted = false;
+var canvasNode;
+var mouthColor;
 
 document.addEventListener('click', onMouseClick);
 

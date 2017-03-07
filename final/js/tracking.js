@@ -6,14 +6,13 @@ var webcam, scene, renderer;
 var videoInput = document.getElementById('inputVideo');
 var canvasInput = document.getElementById('inputCanvas');
 
-var projector = new THREE.Projector();
 var objects = [];
 
 
 var PI2 = Math.PI * 2;
 function particleRender( context ) {
   context.beginPath();
-  context.arc( 0, 0, 1, 0, PI2, true );
+  context.arc( 0, 0, 0, 0, PI2, true );
   context.fill();
 };
 
@@ -22,9 +21,11 @@ var placeTarget = function(x,y,z) {
 
   // Create sprites with lines
 
-  var sprite = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: Math.random() * 0x808008 + 0x808080, program: particleRender } ) );
-  sprite.scale.x = 40*z/1000;
-  sprite.scale.y = 40*z/1000;
+  var color = Math.random() * 0x808008 + 0x808080;
+
+  var sprite = new THREE.Particle( new THREE.ParticleCanvasMaterial( { color: color, program: particleRender } ) );
+  sprite.scale.x = z/1000;
+  sprite.scale.y = z/1000;
   sprite.position.x = x*z/1000;
   sprite.position.y = y*z/1000;
   sprite.position.z = z;
@@ -33,7 +34,7 @@ var placeTarget = function(x,y,z) {
   var geometry = new THREE.Geometry();
   geometry.vertices.push( new THREE.Vector3( -sprite.position.x, -sprite.position.y, 0 ) );
   geometry.vertices.push( new THREE.Vector3( 0, 0, z ) );
-  var line = new THREE.Line( geometry, new THREE.LineBasicMaterial( { color: 0xffffff, linewidth : 1.5 } ) );
+  var line = new THREE.Line( geometry, new THREE.LineBasicMaterial( { color: color, linewidth : 100 } ) );
   line.position.x = sprite.position.x;
   line.position.y = sprite.position.y;
   targetObject.add( line );
@@ -59,14 +60,6 @@ function init() {
   webcam = new THREE.PerspectiveCamera( 23, window.innerWidth / window.innerHeight, 1, 100000 );
   webcam.position.z = 0;
   scene.add( webcam );
-
-  placeTarget(-200*Math.random(), -200*Math.random(), 215.5);
-  placeTarget(100*Math.random(), 0, 315);
-  placeTarget(-150*Math.random(), 100*Math.random(), 410);
-  placeTarget(150*Math.random(), -100*Math.random(),510.5);
-  placeTarget(0,0,460);
-  placeTarget(0,150*Math.random(),121);
-  placeTarget(-50*Math.random(),-150*Math.random(),541);
 
 }
 
@@ -96,25 +89,25 @@ Array.prototype.remove = function(object) {
       break;
     }
   }
-}
+};
 
 function randomTarget() {
+  var big = 800
+  var small = 400
+
   // Create sprites with lines
-  x = (Math.random()*400)-200;
-  y = (Math.random()*400)-200;
-  z = 400*(Math.random()+0.2);
+  x = (Math.random()*big)-small;
+  y = (Math.random()*big)-small;
+  z = big*3*(Math.random()+0.2);
+
   placeTarget(x,y,z);
 }
 
-randomTarget();
-randomTarget();
-randomTarget();
-randomTarget();
-//			randomTarget();
-//			randomTarget();
-//			randomTarget();
-//			randomTarget();
-//			randomTarget();
+var numLines = 200;
+for(var i = 0; i < numLines; i++) {
+  randomTarget();
+}
+
 
 // video styling
 
@@ -125,28 +118,3 @@ headtrackr.controllers.three.realisticAbsoluteCameraControl(webcam, 15, [0,0,0],
 var htracker = new headtrackr.Tracker({altVideo : {ogv : "./media/capture5.ogv", mp4 : "./media/capture5.mp4"}, cameraOffset : 5});
 htracker.init(videoInput, canvasInput);
 htracker.start();
-
-// document.addEventListener('mousedown', onDocumentMouseDown, false)
-//
-// function onDocumentMouseDown( event ) {
-//
-//   event.preventDefault();
-//
-//   var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
-//   projector.unprojectVector( vector, webcam );
-//
-//   var ray = new THREE.Ray( webcam.position, vector.subSelf( webcam.position ).normalize() );
-//
-//   var intersects = ray.intersectObjects( objects );
-//
-//   if ( intersects.length > 0 ) {
-//     var obj = intersects[0].object.parent;
-//     objects.remove(obj.children[0]);
-//     objects.remove(obj.children[1]);
-//     // do something with the first object
-//     scene.remove(intersects[ 0 ].object.parent);
-//     // remove from objects
-//     randomTarget();
-//   }
-//
-// }
